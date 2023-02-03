@@ -6,14 +6,16 @@ import { useState } from "react";
 //      - List
 function App() {
   const [list, setList] = useState(["ĐI HỌC", "ĐI CHƠI"]);
-
+  const receiveData = (data) => {
+    setList((prevList) => [...prevList, data]);
+  };
   return (
     <div className="App">
       <div className="container my-5">
         <div className="row justify-content-center">
           <div className="col-10">
             {/* Form */}
-            <Form />
+            <Form receiveData={receiveData} list={list} />
             {/* Form */}
 
             {/* List */}
