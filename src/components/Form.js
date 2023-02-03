@@ -1,18 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 
 export default function Form(props) {
-  const [newwork, setNewWork] = useState("");
-  const handleChange = (e) => {
-    setNewWork(e.target.value.toLowerCase());
+  const [newwork, setNewWork] = useState({ id: "", content: "" });
+  useEffect(() => {
+    console.log(props.idEdit);
+    setNewWork(props.idEdit);
+  }, [props.idEdit]);
+  const handleChange = (e, name) => {
+    switch (name) {
+      case "id":
+        setNewWork((prev) => ({ ...prev, id: e.target.value }));
+        break;
+      case "content":
+        console.log(e.target.value);
+        setNewWork((prev) => ({ ...prev, content: e.target.value }));
+        break;
+      default:
+        break;
+    }
   };
   const checkValidate = () => {
-    if (newwork.trim() === "") {
+    if (newwork.id.trim() === "" || newwork.content.trim() === "") {
       alert("Không được để trống");
       return false;
     } else {
-      const isExist = props.list.includes(newwork);
-      if (isExist) {
-        alert("Công việc đã tồn tại ");
+      let check = false;
+      props.list.forEach((curr, index) => {
+        if (curr.id === newwork.id) {
+          check = true;
+          return;
+        }
+      });
+      if (check) {
+        alert("ID đã tồn tại , nhập id khác");
         return false;
       }
     }
@@ -21,9 +41,42 @@ export default function Form(props) {
   const handleSubmit = (e) => {
     if (checkValidate()) {
       props.receiveData(newwork);
-      setNewWork("");
     }
   };
+
+  const handleUpdate = () => {
+    props.handleUpdate(newwork);
+  };
+  const form =
+    props.idEdit === "" ? (
+      <>
+        <input
+          type={"text"}
+          id="id"
+          value={newwork.id}
+          placeholder="nhập id"
+          className="form-control mx-2"
+          onChange={(e) => {
+            handleChange(e, "id");
+          }}
+        ></input>
+        <input
+          className="btn btn-info mx-2"
+          type="button"
+          defaultValue="Add"
+          onClick={handleSubmit}
+        />
+      </>
+    ) : (
+      <>
+        <input
+          className="btn btn-info mx-2"
+          type="button"
+          defaultValue="Update"
+          onClick={handleUpdate}
+        />
+      </>
+    );
   return (
     <form className="form-inline justify-content-center my-3">
       <div className="form-group gap-3">
@@ -31,19 +84,16 @@ export default function Form(props) {
         <input
           type="text"
           name=""
-          value={newwork}
+          value={newwork.content}
           id="work"
           className="form-control mx-2"
           placeholder="newwork"
           aria-describedby="helpId"
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e, "content");
+          }}
         />
-        <input
-          className="btn btn-info mx-2"
-          type="button"
-          defaultValue="Add"
-          onClick={handleSubmit}
-        />
+        {form}
       </div>
     </form>
   );

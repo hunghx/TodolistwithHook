@@ -4,11 +4,15 @@ export default function List(props) {
   const handleDelete = (idDelete) => {
     props.handleDelete(idDelete);
   };
+  const handleEdit = (id) => {
+    props.receiveEditId(id);
+  };
   return (
     <table className="table table-striped text-center">
       <thead className="thead-inverse">
         <tr>
           <th>STT</th>
+          <th>ID</th>
           <th>Content</th>
           <th>Action</th>
         </tr>
@@ -16,21 +20,23 @@ export default function List(props) {
       <tbody>
         {props.list.map((current, index) => {
           return (
-            <tr key={index}>
+            <tr key={current.id}>
               <td>{index + 1}</td>
-              <td>{current}</td>
+              <td>{current.id}</td>
+              <td>{current.content}</td>
               <td>
                 <input
                   type="button"
                   className="btn btn-warning mx-2"
                   defaultValue="Edit"
+                  onClick={() => handleEdit(current)}
                 />
                 <input
                   type="button"
                   className="btn btn-danger mx-2"
                   defaultValue="Delete"
                   onClick={() => {
-                    handleDelete(index);
+                    handleDelete(current.id);
                   }}
                 />
               </td>
