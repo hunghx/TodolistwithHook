@@ -1,6 +1,9 @@
 import React from "react";
 
 export default function List(props) {
+  const handleDelete = (idDelete) => {
+    props.handleDelete(idDelete);
+  };
   return (
     <table className="table table-striped text-center">
       <thead className="thead-inverse">
@@ -26,6 +29,9 @@ export default function List(props) {
                   type="button"
                   className="btn btn-danger mx-2"
                   defaultValue="Delete"
+                  onClick={() => {
+                    handleDelete(index);
+                  }}
                 />
               </td>
             </tr>

@@ -9,6 +9,10 @@ function App() {
   const receiveData = (data) => {
     setList((prevList) => [...prevList, data]);
   };
+  const handleDelete = (idDel) => {
+    let newList = list.filter((current, index) => index !== idDel);
+    setList(newList);
+  };
   return (
     <div className="App">
       <div className="container my-5">
@@ -19,7 +23,7 @@ function App() {
             {/* Form */}
 
             {/* List */}
-            <List list={list} />
+            <List handleDelete={handleDelete} list={list} />
             {/* List */}
           </div>
         </div>
